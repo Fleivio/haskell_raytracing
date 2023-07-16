@@ -9,7 +9,7 @@ import Casting.Scene
 import Casting.Trace
 
 camera :: Camera
-camera = Camera (Vec3 0 0 (-100)) 30 20
+camera = Camera (Vec3 0 0 (-100)) (-70) 5
 
 colorTable :: [[Float]]
 colorTable = map (map castR) rs
@@ -19,12 +19,13 @@ colorTable = map (map castR) rs
 
 genStringTable :: [[Float]] -> [String]
 genStringTable grays = [ [ dealInt c | c <- line] ++ "\n" | line <- grays]
-    where dealInt 0 = ' '
-          dealInt 1 = '#'
-          dealInt c
+    where dealInt c 
+            | c <= 0 = ' '
             | c < 0.25 = '.'
             | c < 0.5 = '-'
-            | otherwise = '='
+            | c < 0.75 = '+'
+            | c < 1 = '*'
+            | otherwise = '#'
 
 main :: IO ()
 main = putStrLn . concat $ genStringTable colorTable
