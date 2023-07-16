@@ -1,26 +1,30 @@
 module Main (main) where
 
 import Math.Vector
-import Casting.Intersection
+import Math.Intersection
 import Visual.Object
-import Visual.Color
 import Casting.Camera
-
-sphere :: InstanceObject
-sphere = (Sphere 20, vector 0 0 10, (red, 0, 0, 0, 0, 0.5))
+import Visual.Color
+import Casting.Scene
+import Casting.Trace
 
 camera :: Camera
-camera = (vector 0 0 (-100), 1, 20)
+camera = Camera (Vec3 0 0 (-100)) 30 20
 
-genIntersctTable :: [InstanceObject] -> [[Maybe Intersection]]
-genIntersctTable os = intersect'
-    where obIntersect r = closestIntersection r os
-          intersect' = map (map obIntersect) rs
+colorTable :: [[Float]]
+colorTable = map (map castR) rs
+    where 
+          castR r = toGray $ rayTrace r scene 
           rs = rayCast camera
 
-genStringTable :: [[Maybe Intersection]] -> [String]
-genStringTable is = [ [ dealInt i | i <- line] ++ "\n" | line <- is]
-    where dealInt i = if i == Nothing then ' ' else 'o' 
+genStringTable :: [[Float]] -> [String]
+genStringTable grays = [ [ dealInt c | c <- line] ++ "\n" | line <- grays]
+    where dealInt 0 = ' '
+          dealInt 1 = '#'
+          dealInt c
+            | c < 0.25 = '.'
+            | c < 0.5 = '-'
+            | otherwise = '='
 
 main :: IO ()
-main = putStrLn . concat $ genStringTable (genIntersctTable [sphere])
+main = putStrLn . concat $ genStringTable colorTable

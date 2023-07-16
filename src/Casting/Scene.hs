@@ -1,18 +1,25 @@
-module Casting.Scene (Scene, scene) where
+module Casting.Scene (Scene(..), scene) where
 
-import Math.Vector
 import Visual.Color
 import Visual.Light
+import Math.Vector
 import Visual.Object
+import Visual.Material
 
--- backgroundColor = (0.5, 0.5, 0.5) :: Color
+backgroundColor :: RGB
+backgroundColor = RGB 0 0 0
 
--- ambientLight = (0.1, 0.1, 0.1) :: Color
+ambientLight :: RGB
+ambientLight = RGB 0.1 0.1 0.1
 
-type Scene = ([Light], [InstanceObject])
+lgtSourc :: [Light]
+lgtSourc = [Light (Vec3 0 300 0) white]
+
+ob :: [Object]
+ob = [Object (Sphere 10) vZero metal]
+
+data Scene = Scene {lgtSources :: [Light], objs :: [Object], backLgt :: RGB, ambLgt :: RGB}
 
 scene :: Scene
-scene =
-  ( [light (vector 100 100 0) (1, 1, 1) 50],
-    [(Sphere 1, vector 0 0 0, (red, 0, 0, 0, 0, 0.5)), (Sphere 10, vector 0 0 0, (blue, 0, 0, 0, 0, 0.5))]
-  )
+scene = Scene lgtSourc ob backgroundColor ambientLight
+

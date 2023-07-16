@@ -26,10 +26,10 @@ source-repository head
 library
   exposed-modules:
       Casting.Camera
-      Casting.Intersection
+      Casting.LightRays
       Casting.Scene
-      Casting.Shadow
-      Math.Matrix
+      Casting.Trace
+      Math.Intersection
       Math.Ray
       Math.Vector
       Visual.Color

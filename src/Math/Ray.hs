@@ -1,21 +1,8 @@
-module Math.Ray (Ray, rOrigin, rDirection, rPointAt, ray) where
+module Math.Ray (Ray(..), rPointAt) where
 
 import Math.Vector
 
-type Ray = (Position, Vector)
+data Ray = Ray {ryOrigin :: Vec3, ryDir :: Vec3 } deriving (Show, Eq) 
 
-ray :: Position -> Vector -> Ray
-ray = (,)
-
-rOrigin :: Ray -> Position
-rOrigin (o, _) = o
-
-rDirection :: Ray -> Vector
-rDirection (_, d) = d
-
-rPointAt :: Ray -> Float -> Position
-rPointAt (o, d) t = add o (mul d t)
-
-rReflect :: Ray -> Vector -> Ray
-rReflect (o, d) n = (o, sub d (mul n (2 * dot d n)))
-
+rPointAt :: Ray -> Float -> Vec3
+rPointAt (Ray o d) t = o .+. (d .*. t)

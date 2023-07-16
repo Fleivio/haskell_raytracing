@@ -1,10 +1,10 @@
-module Visual.Light(Light, light) where
+module Visual.Light (Light (..)) where
 
-import Visual.Material
 import Math.Vector
 import Visual.Color
 
-type Light = (Position, Material)
-
-light :: Position -> Color -> Shininess -> Light
-light p c s = (p, (c, 0, 0, 0, 0, s))
+data Light = Light
+  { lgtPosition :: Vec3,
+    lgtColor :: RGB
+  }
+  deriving (Show, Eq)

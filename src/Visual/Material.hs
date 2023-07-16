@@ -1,30 +1,38 @@
-module Visual.Material ( Material, Reflective, Refractive, Diffuse, Specular, Shininess,
-                        mColor, mReflective, mRefractive, mDiffuse, mSpecular, mShininess) where
+module Visual.Material (Material (..), glass, wood, mirror, rubber, metal, plastic, vanta) where
 
 import Visual.Color
 
 type Reflective = Float
-type Refractive = Float
+
+type Transparency = Float
+
 type Diffuse = Float
-type Specular = Float
-type Shininess = Float
 
-type Material = (Color, Reflective, Refractive, Diffuse, Specular, Shininess)
+data Material = Material
+  { mColor :: RGB,
+    mRk :: Reflective,
+    mTk :: Transparency,
+    mDk :: Diffuse
+  }
+  deriving (Show, Eq)
 
-mColor :: Material -> Color
-mColor (c, _, _, _, _, _) = c
+glass :: Material
+glass = Material {mColor = RGB 0.0 0.0 0.0, mRk = 0.0, mTk = 0.9, mDk = 0.0}
 
-mReflective :: Material -> Reflective
-mReflective (_, r, _, _, _, _) = r
+wood :: Material
+wood = Material {mColor = RGB 0.6 0.3 0.1, mRk = 0.0, mTk = 0.0, mDk = 0.9}
 
-mRefractive :: Material -> Refractive
-mRefractive (_, _, r, _, _, _) = r
+mirror :: Material
+mirror = Material {mColor = RGB 0.0 0.0 0.0, mRk = 1, mTk = 0.0, mDk = 0.0}
 
-mDiffuse :: Material -> Diffuse
-mDiffuse (_, _, _, d, _, _) = d
+rubber :: Material
+rubber = Material {mColor = RGB 0.1 0.1 0.1, mRk = 0.0, mTk = 0.0, mDk = 0.9}
 
-mSpecular :: Material -> Specular
-mSpecular (_, _, _, _, s, _) = s
+metal :: Material
+metal = Material {mColor = RGB 0.5 0.5 0.5, mRk = 0.0, mTk = 0.0, mDk = 0.9}
 
-mShininess :: Material -> Shininess
-mShininess (_, _, _, _, _, s) = s
+plastic :: Material
+plastic = Material {mColor = RGB 0.5 0.5 0.5, mRk = 0.0, mTk = 0.0, mDk = 0.9}
+
+vanta :: Material
+vanta = Material {mColor = RGB 0.0 0.0 0.0, mRk = 0.0, mTk = 0.0, mDk = 1}

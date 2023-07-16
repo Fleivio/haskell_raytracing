@@ -1,50 +1,54 @@
-module Math.Vector (Vector, Position, vector, vectorZero, add, sub, dot, dot4, modul, mul, cross, normalize, getX, getY, getZ, getW) where
+module Math.Vector (Vector (..), Vec3 (..)) where
 
-type Vector = (Float, Float, Float, Float)
-type Position = Vector
+class Vector a where
+  vZero :: a
+  (.+.) :: a -> a -> a
+  (.-.) :: a -> a -> a
+  (./.) :: a -> Float -> a
+  (.*.) :: a -> Float -> a
+  (<->) :: a -> a -> Float
+  (...) :: a -> a -> Float
+  (.\/.) :: a -> a -> Float
+  (.><.) :: a -> a -> a
+  vDot :: a -> a -> Float
+  vNeg :: a -> a
+  vDistance :: a -> a -> Float
+  vAngle :: a -> a -> Float
+  vModul :: a -> Float
+  vNormalize :: a -> a
+  vCross :: a -> a -> a
 
-vector :: Float -> Float -> Float -> Vector
-vector x y z = (x, y, z, 1)
+data Vec3 = Vec3 {x :: Float, y :: Float, z :: Float} deriving (Show, Eq)
 
-getX :: Vector -> Float
-getX (x, _, _, _) = x
+instance Vector Vec3 where
+  vZero = Vec3 0 0 0
 
-getY :: Vector -> Float
-getY (_, y, _, _) = y
+  (Vec3 x1 y1 z1) .+. (Vec3 x2 y2 z3) = Vec3 (x1 + x2) (y1 + y2) (z1 + z3)
 
-getZ :: Vector -> Float
-getZ (_, _, z, _) = z
+  (Vec3 x1 y1 z1) .-. (Vec3 x2 y2 z3) = Vec3 (x1 - x2) (y1 - y2) (z1 - z3)
 
-getW :: Vector -> Float
-getW (_, _, _, w) = w
+  (Vec3 x1 y1 z1) ./. f = Vec3 (x1 / f) (y1 / f) (z1 / f)
 
-vectorZero :: Vector
-vectorZero = (0,0,0,1)
+  (Vec3 x1 y1 z1) .*. f = Vec3 (x1 * f) (y1 * f) (z1 * f)
 
-add :: Vector -> Vector -> Vector
-add (x1,y1,z1,w1) (x2,y2,z2,w2) = (x1 + x2, y1 + y2, z1 + z2, w1 + w2)
+  (Vec3 x1 y1 z1) ... (Vec3 x2 y2 z3) = (x1 * x2) + (y1 * y2) + (z1 * z3)
 
-sub :: Vector -> Vector -> Vector
-sub (x1,y1,z1,w1) (x2,y2,z2,w2) = (x1 - x2, y1 - y2, z1 - z2, w1 - w2)
+  (Vec3 x1 y1 z1) <-> (Vec3 x2 y2 z3) = sqrt $ (x1 - x2) ** 2 + (y1 - y2) ** 2 + (z1 - z3) ** 2
 
-dot :: Vector -> Vector -> Float
-dot (x1,y1,z1,_) (x2,y2,z2,_) = x1 * x2 + y1 * y2 + z1 * z2
+  (Vec3 x1 y1 z1) .><. (Vec3 x2 y2 z2) = Vec3 (y1 * z2 - z1 * y2) (z1 * x2 - x1 * z2) (x1 * y2 - y1 * x2)
 
-dot4 :: Vector -> Vector -> Float
-dot4 (x1,y1,z1,w1) (x2,y2,z2,w2) = x1 * x2 + y1 * y2 + z1 * z2 + w1 * w2
+  v1 .\/. v2 = acos $ (v1 ... v2) / (vModul v1 * vModul v2)
 
-modul :: Vector -> Float
-modul (x,y,z,w) = sqrt $ x**2 + y**2 + z**2 + w**2
+  vDot = (...)
 
-mul :: Vector -> Float -> Vector
-mul (x,y,z,w) d = (x*d, y*d, z*d, w*d)
+  vNeg v = v .*. (-1)
 
-cross :: Vector -> Vector -> Vector
-cross (x1,y1,z1,_) (x2,y2,z2,_) = vector x y z
-    where x = y1 * z2 + z1 * y2
-          y = - (x1 * z2 + z1 * x2)
-          z = x1 * y2 + x2 * y1
+  vDistance = (<->)
 
-normalize :: Vector -> Vector
-normalize v = if modul v == 0 then vectorZero else v `mul` t
-    where t = 1 / modul v
+  vAngle = (.\/.)
+
+  vModul (Vec3 x1 y1 z1) = sqrt $ x1 ** 2 + y1 ** 2 + z1 ** 2
+
+  vNormalize v = v ./. vModul v
+
+  vCross v1 v2 = v1 .><. v2
