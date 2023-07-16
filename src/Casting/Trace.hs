@@ -5,6 +5,7 @@ import Math.Ray
 import Math.Intersection
 import Casting.Scene
 import Casting.LightRays
+import Visual.Material
 
 maxDepth :: Int
 maxDepth = 10
@@ -14,7 +15,7 @@ rayTrace' :: Int -> Ray -> Scene -> RGB
 rayTrace' depth ray (Scene lsrc objs sBackLgt sAmbLgt)
     = maybe sBackLgt localColor ptIntersec
 
-        where localColor i = sAmbLgt `colAdd` multipleLightsAt lsrc i objs
+        where localColor i = ( mColor (mat i) `colCombine` sAmbLgt) `colAdd` multipleLightsAt lsrc i objs
               ptIntersec = closestIntersection ray objs
 
 rayTrace :: Ray -> Scene -> RGB

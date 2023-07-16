@@ -15,7 +15,7 @@ lightIntensityAt lightDir normal = max 0 (nNormal ... nLight)
 
 singleLightAt :: Light -> Intersection -> [Object] -> RGB
 singleLightAt lg (Intersection iNormal _ iMaterial iPos ) os = if lightReachPoint
-                                                               then totalLight
+                                                               then totalLight `colMult` mDk iMaterial
                                                                else black
     where lgtPlusMatColor = colCombine (lgtColor lg) (mColor iMaterial)
           lDirection = lgtPosition lg .-. iPos

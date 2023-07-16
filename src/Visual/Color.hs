@@ -1,7 +1,7 @@
 {-# LANGUAGE AllowAmbiguousTypes #-}
 {-# OPTIONS_GHC -Wno-unused-top-binds #-}
 
-module Visual.Color (RGB(..), Color (..)) where
+module Visual.Color (RGB(..), Color (..), scale255) where
 
 class Color a where
   colMax :: Float
@@ -47,4 +47,8 @@ instance Color RGB where
   green = RGB 0 1 0
   blue = RGB 0 0 1
 
-  toASCII c = aciiTable !! round (toGray c * 100)
+  toASCII c = aciiTable !! indx
+    where indx = min ((length aciiTable) - 1) (round (toGray c * 100))
+
+scale255 :: Float -> Int
+scale255 x = round (x * 255)

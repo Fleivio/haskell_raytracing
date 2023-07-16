@@ -7,18 +7,16 @@ import Casting.Camera
 import Visual.Color
 import Casting.Scene
 import Casting.Trace
+import Ppm.Ppm (makePgm)
 
-camera :: Camera
-camera = Camera (Vec3 0 0 (-100)) (-70) 5
-
-camera2 :: Camera
-camera2 = Camera (Vec3 0 0 (-100)) 0 50
+cam :: Camera
+cam = hugeCamera
 
 colorTable :: [[RGB]]
 colorTable = map (map castR) rs
     where 
           castR r = rayTrace r scene 
-          rs = rayCast camera2
+          rs = rayCast cam
 
 grayTable :: [[Float]]
 grayTable = map (map toGray) colorTable
@@ -31,4 +29,9 @@ stringColorTable  = [concat [ show c | c <- line] ++ "\n" | line <- colorTable]
 
 
 main :: IO ()
-main = putStrLn . concat $ genStringTable
+main = do 
+    putStrLn . concat $ genStringTable
+    writeFile "test.ppm" (makePgm resol resol colorString)
+    where 
+        resol = fromIntegral $ length colorTable
+        colorString = concat colorTable

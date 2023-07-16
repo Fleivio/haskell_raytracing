@@ -32,6 +32,7 @@ library
       Math.Intersection
       Math.Ray
       Math.Vector
+      Ppm.Ppm
       Visual.Color
       Visual.Light
       Visual.Material
