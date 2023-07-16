@@ -10,13 +10,14 @@ backgroundColor :: RGB
 backgroundColor = RGB 0 0 0
 
 ambientLight :: RGB
-ambientLight = RGB 0.1 0.1 0.1
+ambientLight = RGB 0.01 0.01 0.01
 
 lgtSourc :: [Light]
-lgtSourc = [Light (Vec3 0 300 0) white]
+lgtSourc = [Light (Vec3 0 300 0) white,
+            Light (Vec3 100 100 0) white]
 
 ob :: [Object]
-ob = [Object (Sphere 10) vZero metal]
+ob = [Object (Sphere 10) vZero metal, Object (Sphere 10) (Vec3 30 0 0) wood]
 
 data Scene = Scene {lgtSources :: [Light], objs :: [Object], backLgt :: RGB, ambLgt :: RGB}
 

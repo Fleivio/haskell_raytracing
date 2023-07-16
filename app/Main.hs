@@ -11,28 +11,24 @@ import Casting.Trace
 camera :: Camera
 camera = Camera (Vec3 0 0 (-100)) (-70) 5
 
+camera2 :: Camera
+camera2 = Camera (Vec3 0 0 (-100)) 0 50
+
 colorTable :: [[RGB]]
 colorTable = map (map castR) rs
     where 
           castR r = rayTrace r scene 
-          rs = rayCast camera
+          rs = rayCast camera2
 
 grayTable :: [[Float]]
 grayTable = map (map toGray) colorTable
 
-genStringTable :: [[Float]] -> [String]
-genStringTable grays = [ [ dealInt c | c <- line] ++ "\n" | line <- grays]
-    where dealInt c 
-            | c <= 0 = ' '
-            | c < 0.25 = '.'
-            | c < 0.5 = '-'
-            | c < 0.75 = '+'
-            | c < 1 = '*'
-            | otherwise = '#'
+genStringTable :: [String]
+genStringTable = [ [ toASCII c | c <- line] ++ "\n" | line <- colorTable]
 
 stringColorTable :: [String]
 stringColorTable  = [concat [ show c | c <- line] ++ "\n" | line <- colorTable]
 
 
 main :: IO ()
-main = putStrLn . concat $ stringColorTable
+main = putStrLn . concat $ genStringTable

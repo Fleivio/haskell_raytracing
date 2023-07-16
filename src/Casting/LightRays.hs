@@ -1,4 +1,4 @@
-module Casting.LightRays(multipleLightsAt) where
+module Casting.LightRays(multipleLightsAt, singleLightAt) where
 
 import Math.Vector
 import Visual.Color
@@ -24,5 +24,4 @@ singleLightAt lg (Intersection iNormal _ iMaterial iPos ) os = if lightReachPoin
           totalLight = lgtPlusMatColor `colMult` lightIntensity
 
 multipleLightsAt :: [Light] -> Intersection -> [Object] -> RGB
-multipleLightsAt lights inters os = 
-    foldl colAdd black $ map (\l -> singleLightAt l inters os) lights
+multipleLightsAt lights inters os = foldl colAdd black (map (\l -> singleLightAt l inters os) lights)

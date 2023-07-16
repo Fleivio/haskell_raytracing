@@ -22,7 +22,7 @@ isPathFree origin destiny objs = let r = Ray origin rayDir
                                      intersec = closestIntersection r objs
                                  in case intersec of 
                                     Nothing -> True
-                                    Just i -> distanceToDestiny < pos i <-> origin
+                                    Just i -> distanceToDestiny > pos i <-> origin
     where rayDir = vNormalize $ destiny .-. origin
           distanceToDestiny = vDistance origin destiny
 
