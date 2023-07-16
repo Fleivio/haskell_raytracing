@@ -18,7 +18,10 @@ class Color a where
   green :: a
   blue :: a
 
-data RGB = RGB {r :: Float, g :: Float, b :: Float} deriving (Show, Eq)
+data RGB = RGB {r :: Float, g :: Float, b :: Float} deriving Eq
+
+instance Show RGB where 
+  show (RGB r g b) = "(" ++ show r ++ " " ++ show g ++ " " ++ show b ++ ")"
 
 instance Color RGB where
   colMax = 1
