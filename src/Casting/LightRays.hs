@@ -22,7 +22,7 @@ diffuseLight (Light lightPosition lightColor)
                      then combCols `colMult` lightIntensity
                      else black
     where combCols = colCombine lightColor mCol
-          lightReachPoint = isPathFree lightPosition iPos objs
+          lightReachPoint = isPathFree iPos lightPosition objs
           lightIntensity = diffuseIntensityAt (lightPosition .-. iPos) iNormal
 
 diffuseLights :: [Light] -> Intersection -> [Object] -> RGB
@@ -45,7 +45,7 @@ specularLight (Light lightPosition lightColor)
                      then lightColor `colMult` lightIntensity
                      else black
     where   viewDir = iPos .-. ryOrigin ry
-            lightReachPoint = isPathFree lightPosition iPos objs
+            lightReachPoint = isPathFree iPos lightPosition  objs
             lightIntensity = specularIntensityAt (lightPosition .-. iPos) iNormal viewDir
 
 specularLights :: [Light] -> Intersection -> [Object] -> RGB

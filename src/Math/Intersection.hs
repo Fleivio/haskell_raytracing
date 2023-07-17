@@ -18,14 +18,13 @@ solve2 a b c = let d = b * b - 4 * a * c
                        in Just (t1, t2)
 
 isPathFree :: Vec3 -> Vec3 -> [Object] -> Bool
-isPathFree origin destiny objs = let r = Ray rayOrig rayDir
+isPathFree origin destiny objs = let r = Ray (rayOrig .+. rayDir ) rayDir
                                      intersec = closestIntersection r objs
                                  in case intersec of 
                                     Nothing -> True
-                                    Just i -> distanceToDestiny <= vDistance (pos i) origin
+                                    Just i -> (pos i <-> origin) < (pos i <-> destiny) 
     where rayDir = vNormalize $ destiny .-. origin
-          rayOrig = origin 
-          distanceToDestiny = destiny <-> origin
+          rayOrig = origin
 
 intersect :: Ray -> Object -> [(Double, Intersection)]
 intersect r@(Ray rayOrigin rayDir)
