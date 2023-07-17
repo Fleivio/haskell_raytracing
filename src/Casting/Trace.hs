@@ -9,7 +9,7 @@ import Math.Ray
 import Math.Vector
 
 maxDepth :: Int
-maxDepth = 5
+maxDepth = 3
 
 localColor :: Ray -> Scene -> RGB
 localColor ray (Scene lsrc objs sBackLgt sAmbLgt) = maybe sBackLgt locColor inters

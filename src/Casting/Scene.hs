@@ -20,6 +20,8 @@ lgtSourc = [
 ob :: [Object]
 ob = [Object (Sphere 10) (Vec3 (-30) 0 0) plastic,
       Object (Sphere 10) (Vec3 (-30) (-30) 0) wood,
+      Object (Sphere 4) (Vec3 (0) (-30) 0) metal,
+      Object (Sphere 4) (Vec3 (5) (-30) 0) rubber,
       Object (Sphere 10) (Vec3 0 0 (10)) mirror]
 
 data Scene = Scene {lgtSources :: [Light], objs :: [Object], backLgt :: RGB, ambLgt :: RGB}
