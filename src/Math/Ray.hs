@@ -4,5 +4,5 @@ import Math.Vector
 
 data Ray = Ray {ryOrigin :: Vec3, ryDir :: Vec3 } deriving (Show, Eq) 
 
-rPointAt :: Ray -> Float -> Vec3
+rPointAt :: Ray -> Double -> Vec3
 rPointAt (Ray o d) t = o .+. (d .*. t)

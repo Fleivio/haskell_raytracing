@@ -4,7 +4,7 @@ import Math.Vector
 import Visual.Material
 
 data Shape
-  = Sphere Float
+  = Sphere Double
   | None
   deriving (Show, Eq)
 

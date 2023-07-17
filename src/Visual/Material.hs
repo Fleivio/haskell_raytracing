@@ -2,11 +2,11 @@ module Visual.Material (Material (..), glass, wood, mirror, rubber, metal, plast
 
 import Visual.Color
 
-type Reflective = Float
+type Reflective = Double
 
-type Transparency = Float
+type Transparency = Double
 
-type Diffuse = Float
+type Diffuse = Double
 
 data Material = Material
   { mColor :: RGB,

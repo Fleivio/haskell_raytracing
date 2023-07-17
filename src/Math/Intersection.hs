@@ -9,7 +9,7 @@ import Data.List (sortOn)
 
 data Intersection = Intersection{ normal :: Vec3, ry :: Ray, mat :: Material, pos :: Vec3 } deriving (Show, Eq)
 
-solve2 :: Float -> Float -> Float -> Maybe (Float, Float)
+solve2 :: Double -> Double -> Double -> Maybe (Double, Double)
 solve2 a b c = let d = b * b - 4 * a * c
                in if d < 0
                   then Nothing
@@ -18,15 +18,16 @@ solve2 a b c = let d = b * b - 4 * a * c
                        in Just (t1, t2)
 
 isPathFree :: Vec3 -> Vec3 -> [Object] -> Bool
-isPathFree origin destiny objs = let r = Ray origin rayDir
+isPathFree origin destiny objs = let r = Ray rayOrig rayDir
                                      intersec = closestIntersection r objs
                                  in case intersec of 
                                     Nothing -> True
-                                    Just i -> distanceToDestiny > pos i <-> origin
+                                    Just i -> distanceToDestiny <= vDistance (pos i) origin
     where rayDir = vNormalize $ destiny .-. origin
-          distanceToDestiny = vDistance origin destiny
+          rayOrig = origin .+. rayDir
+          distanceToDestiny = destiny <-> origin
 
-intersect :: Ray -> Object -> [(Float, Intersection)]
+intersect :: Ray -> Object -> [(Double, Intersection)]
 intersect r@(Ray rayOrigin rayDir)
           (Object shape obCenter material)
     = case shape of

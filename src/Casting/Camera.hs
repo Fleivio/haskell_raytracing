@@ -5,7 +5,7 @@ import Math.Vector
 
 type Eye = Vec3
 
-type Near = Float
+type Near = Double
 
 type Resolution = Integer
 
@@ -33,4 +33,4 @@ baseCamera :: Camera
 baseCamera = Camera (Vec3 0 0 (-100)) 0 50
 
 hugeCamera :: Camera
-hugeCamera = Camera (Vec3 0 0 (-100)) 400 200
+hugeCamera = Camera (Vec3 0 0 (-100)) 1500 1000

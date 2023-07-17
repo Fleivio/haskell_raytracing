@@ -18,7 +18,7 @@ colorTable = map (map castR) rs
           castR r = rayTrace r scene 
           rs = rayCast cam
 
-grayTable :: [[Float]]
+grayTable :: [[Double]]
 grayTable = map (map toGray) colorTable
 
 genStringTable :: [String]

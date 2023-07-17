@@ -4,21 +4,21 @@ class Vector a where
   vZero :: a
   (.+.) :: a -> a -> a
   (.-.) :: a -> a -> a
-  (./.) :: a -> Float -> a
-  (.*.) :: a -> Float -> a
-  (<->) :: a -> a -> Float
-  (...) :: a -> a -> Float
-  (.\/.) :: a -> a -> Float
+  (./.) :: a -> Double -> a
+  (.*.) :: a -> Double -> a
+  (<->) :: a -> a -> Double
+  (...) :: a -> a -> Double
+  (.\/.) :: a -> a -> Double
   (.><.) :: a -> a -> a
-  vDot :: a -> a -> Float
+  vDot :: a -> a -> Double
   vNeg :: a -> a
-  vDistance :: a -> a -> Float
-  vAngle :: a -> a -> Float
-  vModul :: a -> Float
+  vDistance :: a -> a -> Double
+  vAngle :: a -> a -> Double
+  vModul :: a -> Double
   vNormalize :: a -> a
   vCross :: a -> a -> a
 
-data Vec3 = Vec3 {x :: Float, y :: Float, z :: Float} deriving (Show, Eq)
+data Vec3 = Vec3 {x :: Double, y :: Double, z :: Double} deriving (Show, Eq)
 
 instance Vector Vec3 where
   vZero = Vec3 0 0 0

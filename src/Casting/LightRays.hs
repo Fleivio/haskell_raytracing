@@ -7,7 +7,7 @@ import Visual.Object
 import Visual.Material
 import Math.Intersection
 
-lightIntensityAt :: Vec3 -> Vec3 -> Float
+lightIntensityAt :: Vec3 -> Vec3 -> Double
 lightIntensityAt lightDir normal = max 0 (nNormal ... nLight)
     where
         nNormal = vNormalize normal
@@ -19,7 +19,7 @@ singleLightAt lg (Intersection iNormal _ iMaterial iPos ) os = if lightReachPoin
                                                                else black
     where lgtPlusMatColor = colCombine (lgtColor lg) (mColor iMaterial)
           lDirection = lgtPosition lg .-. iPos
-          lightReachPoint = isPathFree iPos (lgtPosition lg) os
+          lightReachPoint = isPathFree (lgtPosition lg) iPos os
           lightIntensity = lightIntensityAt lDirection iNormal
           totalLight = lgtPlusMatColor `colMult` lightIntensity
 
