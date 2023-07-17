@@ -13,15 +13,14 @@ ambientLight :: RGB
 ambientLight = RGB 0.2 0.2 0.2
 
 lgtSourc :: [Light]
--- lgtSourc = sphereOfLights (Vec3 1000 0 0) 40
 lgtSourc = [
-            Light (Vec3 (-100) (-100) (-100)) white
+            Light (Vec3 50 0 0) white
       ]
 
 ob :: [Object]
-ob = [Object (Sphere 10) (Vec3 (-30) 0 (-10)) plastic,
-      Object (Sphere 10) (Vec3 (-30) (-50) (-10)) plastic,
-      Object (Sphere 10) (Vec3 0 0 0) mirror]
+ob = [Object (Sphere 10) (Vec3 (-30) 0 0) plastic,
+      Object (Sphere 10) (Vec3 (-30) (-30) 0) wood,
+      Object (Sphere 10) (Vec3 0 0 (10)) mirror]
 
 data Scene = Scene {lgtSources :: [Light], objs :: [Object], backLgt :: RGB, ambLgt :: RGB}
 

@@ -54,6 +54,5 @@ instance Vector Vec3 where
 
   vCross v1 v2 = v1 .><. v2
 
-  vReflect vec nor = vec .-. p
-    where p = (vec .-. nor) .*. 2
-
+  vReflect vec nor = nor .*. p .-. vec
+    where p = (vec ... nor) * 2

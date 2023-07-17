@@ -22,7 +22,7 @@ diffuseLight (Light lightPosition lightColor)
                      then combCols `colMult` lightIntensity
                      else black
     where combCols = colCombine lightColor mCol
-          lightReachPoint = isPathFree iPos lightPosition objs
+          lightReachPoint = isPointLig iPos lightPosition objs
           lightIntensity = diffuseIntensityAt (lightPosition .-. iPos) iNormal
 
 diffuseLights :: [Light] -> Intersection -> [Object] -> RGB
@@ -30,7 +30,7 @@ diffuseLights lights inters os = clamp $ foldl colAdd black (map (\l -> diffuseL
 
 
 specularIntensityAt :: Vec3 -> Vec3 -> Vec3  -> Double
-specularIntensityAt lightDir normal viewDir = (cos phi) ** 100
+specularIntensityAt lightDir normal viewDir = cos phi ** 100
     where
         reflectedDir = vNormalize $ vReflect nLight nNormal
         nNormal = vNormalize normal
@@ -44,8 +44,8 @@ specularLight (Light lightPosition lightColor)
               objs = if lightReachPoint
                      then lightColor `colMult` lightIntensity
                      else black
-    where   viewDir = iPos .-. ryOrigin ry
-            lightReachPoint = isPathFree iPos lightPosition  objs
+    where   viewDir = vNeg $ ryDir ry
+            lightReachPoint = isPointLig iPos lightPosition objs
             lightIntensity = specularIntensityAt (lightPosition .-. iPos) iNormal viewDir
 
 specularLights :: [Light] -> Intersection -> [Object] -> RGB

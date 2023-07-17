@@ -9,7 +9,7 @@ import Math.Ray
 import Math.Vector
 
 maxDepth :: Int
-maxDepth = 6
+maxDepth = 5
 
 localColor :: Ray -> Scene -> RGB
 localColor ray (Scene lsrc objs sBackLgt sAmbLgt) = maybe sBackLgt locColor inters
@@ -20,10 +20,13 @@ localColor ray (Scene lsrc objs sBackLgt sAmbLgt) = maybe sBackLgt locColor inte
 reflectedColor :: Int -> Ray -> Scene -> RGB
 reflectedColor depth ray s = clamp . (`colMult` (1/fromIntegral depth )) $ maybe black refColor inters
     where inters = closestIntersection ray (objs s)
-          refColor i = rayTrace' (depth + 1) (Ray (pos i .+. out_ray_dir) out_ray_dir) s
-            where   k = 2 * (vNormalize (normal i) `vDot` vNormalize (vNeg rd))
-                    out_ray_dir = vNormalize $ vNeg rd .-.  (vNormalize (normal i) .*. k)
-                    rd = ryDir ray
+          refColor i = rayTrace' (depth + 1) (Ray rPos dirRay) s `colMult` mRk (mat i)
+            where   k = 2 * (nNormalS ... opRayDir)
+                    rPos = pos i .+. (dirRay .*. 0.1)
+                    dirRay = vNeg $ nNormalS .*. k .-. opRayDir
+                    opRayDir = vNormalize $ vNeg $ ryDir ray
+                    nNormalS = vNormalize $ normal i
+
             -- where orRay = pos i .+. (dirRay .*. 0.1)
             --       dirRay = vReflect opRayDir (normal i)
             --       opRayDir = vNormalize $ pos i .-. ryOrigin ray
@@ -40,7 +43,7 @@ reflectedColor depth ray s = clamp . (`colMult` (1/fromIntegral depth )) $ maybe
 rayTrace' :: Int -> Ray -> Scene -> RGB
 rayTrace' depth ray s
     | depth >= maxDepth = black
-    | otherwise =  localColor ray s `colAdd` reflectedColor depth ray s
+    | otherwise = clamp $ localColor ray s `colAdd` reflectedColor depth ray s
 
 rayTrace :: Ray -> Scene -> RGB
 rayTrace = rayTrace' 1
