@@ -51,12 +51,6 @@ specularLight (Light lightPosition lightColor)
 specularLights :: [Light] -> Intersection -> [Object] -> RGB
 specularLights lights inters os = clamp $ foldl colAdd black (map (\l -> specularLight l inters os) lights)
 
--- singleLightAt :: Light -> Intersection -> [Object] -> RGB
--- singleLightAt lgt inter objs = diffuseLight lgt inter objs `colMult` dk `colCombine`
---                                specularLight lgt inter objs `colMult` rk
---     where rk = mRk $ mat inter
---           dk = mDk $ mat inter
-
 multipleLightsAt :: [Light] -> Intersection -> [Object] -> RGB
 multipleLightsAt lights inters os = clamp $ specularLights lights inters os `colMult` rk `colAdd`
                                     diffuseLights lights inters os `colMult` dk
