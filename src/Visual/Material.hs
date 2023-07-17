@@ -25,7 +25,7 @@ wood :: Material
 wood = Material {mColor = RGB 0.6 0.3 0.1, mRk = 0.4, mTk = 0.0, mDk = 0.4}
 
 mirror :: Material
-mirror = Material {mColor = RGB 0.8 0.8 0.8, mRk = 1, mTk = 0.0, mDk = 0.1}
+mirror = Material {mColor = RGB 0.8 0.8 0.8, mRk = 0.9, mTk = 0.0, mDk = 0.01}
 
 rubber :: Material
 rubber = Material {mColor = RGB 0.1 0.1 0.1, mRk = 0.0, mTk = 0.0, mDk = 0.9}

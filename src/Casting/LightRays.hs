@@ -57,8 +57,6 @@ specularLights lights inters os = clamp $ foldl colAdd black (map (\l -> specula
 --     where rk = mRk $ mat inter
 --           dk = mDk $ mat inter
 
-          
-
 multipleLightsAt :: [Light] -> Intersection -> [Object] -> RGB
 multipleLightsAt lights inters os = clamp $ specularLights lights inters os `colMult` rk `colAdd`
                                     diffuseLights lights inters os `colMult` dk
