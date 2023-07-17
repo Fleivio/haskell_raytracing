@@ -1,4 +1,4 @@
-module Casting.LightRays(multipleLightsAt, singleLightAt) where
+module Casting.LightRays(multipleLightsAt) where
 
 import Math.Vector
 import Visual.Color
@@ -6,22 +6,61 @@ import Visual.Light
 import Visual.Object
 import Visual.Material
 import Math.Intersection
+import Math.Ray
+import Data.Fixed(mod')
 
-lightIntensityAt :: Vec3 -> Vec3 -> Double
-lightIntensityAt lightDir normal = max 0 (nNormal ... nLight)
+diffuseIntensityAt :: Vec3 -> Vec3 -> Double
+diffuseIntensityAt lightDir normal = max 0 (nNormal ... nLight)
     where
         nNormal = vNormalize normal
         nLight = vNormalize lightDir
 
-singleLightAt :: Light -> Intersection -> [Object] -> RGB
-singleLightAt lg (Intersection iNormal _ iMaterial iPos ) os = if lightReachPoint
-                                                               then totalLight `colMult` mDk iMaterial
-                                                               else black
-    where lgtPlusMatColor = colCombine (lgtColor lg) (mColor iMaterial)
-          lDirection = lgtPosition lg .-. iPos
-          lightReachPoint = isPathFree (lgtPosition lg) iPos os
-          lightIntensity = lightIntensityAt lDirection iNormal
-          totalLight = lgtPlusMatColor `colMult` lightIntensity
+diffuseLight :: Light -> Intersection -> [Object] -> RGB
+diffuseLight (Light lightPosition lightColor)
+             (Intersection iNormal _ (Material mCol _ _ _ ) iPos )
+             objs =  if lightReachPoint
+                     then combCols `colMult` lightIntensity
+                     else black
+    where combCols = colCombine lightColor mCol
+          lightReachPoint = isPathFree lightPosition iPos objs
+          lightIntensity = diffuseIntensityAt (lightPosition .-. iPos) iNormal
+
+diffuseLights :: [Light] -> Intersection -> [Object] -> RGB
+diffuseLights lights inters os = clamp $ foldl colAdd black (map (\l -> diffuseLight l inters os) lights)
+
+
+specularIntensityAt :: Vec3 -> Vec3 -> Vec3  -> Double
+specularIntensityAt lightDir normal viewDir = (cos phi) ** 100
+    where
+        reflectedDir = vNormalize $ vReflect nLight nNormal
+        nNormal = vNormalize normal
+        nLight = vNormalize lightDir
+        nView = vNormalize viewDir
+        phi = vAngle reflectedDir nView `mod'` pi
+
+specularLight :: Light -> Intersection -> [Object] -> RGB
+specularLight (Light lightPosition lightColor)
+              (Intersection iNormal ry _ iPos)
+              objs = if lightReachPoint
+                     then lightColor `colMult` lightIntensity
+                     else black
+    where   viewDir = iPos .-. ryOrigin ry
+            lightReachPoint = isPathFree lightPosition iPos objs
+            lightIntensity = specularIntensityAt (lightPosition .-. iPos) iNormal viewDir
+
+specularLights :: [Light] -> Intersection -> [Object] -> RGB
+specularLights lights inters os = clamp $ foldl colAdd black (map (\l -> specularLight l inters os) lights)
+
+-- singleLightAt :: Light -> Intersection -> [Object] -> RGB
+-- singleLightAt lgt inter objs = diffuseLight lgt inter objs `colMult` dk `colCombine`
+--                                specularLight lgt inter objs `colMult` rk
+--     where rk = mRk $ mat inter
+--           dk = mDk $ mat inter
+
+          
 
 multipleLightsAt :: [Light] -> Intersection -> [Object] -> RGB
-multipleLightsAt lights inters os = foldl colAdd black (map (\l -> singleLightAt l inters os) lights)
+multipleLightsAt lights inters os = clamp $ specularLights lights inters os `colMult` rk `colAdd`
+                                    diffuseLights lights inters os `colMult` dk
+    where dk = mDk $ mat inters
+          rk = mRk $ mat inters

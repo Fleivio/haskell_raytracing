@@ -17,6 +17,7 @@ class Vector a where
   vModul :: a -> Double
   vNormalize :: a -> a
   vCross :: a -> a -> a
+  vReflect :: a -> a -> a
 
 data Vec3 = Vec3 {x :: Double, y :: Double, z :: Double} deriving (Show, Eq)
 
@@ -52,3 +53,7 @@ instance Vector Vec3 where
   vNormalize v = v ./. vModul v
 
   vCross v1 v2 = v1 .><. v2
+
+  vReflect vec nor = vec .-. p
+    where p = (vec .-. nor) .*. 2
+
