@@ -30,7 +30,7 @@ stringColorTable  = [concat [ show c | c <- line] ++ "\n" | line <- colorTable]
 
 main :: IO ()
 main = do 
-    putStrLn . concat $ genStringTable
+    -- putStrLn . concat $ genStringTable
     writeFile "test.ppm" (makePgm resol resol colorString)
     where 
         resol = fromIntegral $ length colorTable

@@ -24,7 +24,7 @@ isPathFree origin destiny objs = let r = Ray rayOrig rayDir
                                     Nothing -> True
                                     Just i -> distanceToDestiny <= vDistance (pos i) origin
     where rayDir = vNormalize $ destiny .-. origin
-          rayOrig = origin .+. rayDir
+          rayOrig = origin 
           distanceToDestiny = destiny <-> origin
 
 intersect :: Ray -> Object -> [(Double, Intersection)]
