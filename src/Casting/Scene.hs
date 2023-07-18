@@ -7,14 +7,16 @@ import Visual.Object
 import Visual.Material
 
 backgroundColor :: RGB
-backgroundColor = RGB 0.01 0.01 0.01
+backgroundColor = RGB 0.2 0.2 0.2
 
 ambientLight :: RGB
-ambientLight = RGB 0.2 0.2 0.2
+ambientLight = backgroundColor
 
 lgtSourc :: [Light]
 lgtSourc = [
-            Light (Vec3 80 0 0) white
+            Light (Vec3 80 0 0) red,
+            Light (Vec3 (-80) 80 0) blue,
+            Light (Vec3 0 (-100) 0) green
       ]
 
 ob :: [Object]

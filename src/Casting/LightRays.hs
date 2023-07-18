@@ -17,7 +17,7 @@ diffuseIntensityAt lightDir n = max 0 (nNormal ... nLight)
 
 diffuseLight :: Light -> Intersection -> [Object] -> RGB
 diffuseLight (Light lightPosition lightColor)
-             (Intersection iNormal _ (Material mCol _ _ _ ) iPos )
+             (Intersection iNormal _ (Material mCol _ _ _ _ ) iPos )
              objs =  if lightReachPoint
                      then combCols `colMult` lightIntensity
                      else black
@@ -52,7 +52,7 @@ specularLights :: [Light] -> Intersection -> [Object] -> RGB
 specularLights lights inters os = clamp $ foldl colAdd black (map (\l -> specularLight l inters os) lights)
 
 multipleLightsAt :: [Light] -> Intersection -> [Object] -> RGB
-multipleLightsAt lights inters os = clamp $ specularLights lights inters os `colMult` rk `colAdd`
+multipleLightsAt lights inters os = clamp $ specularLights lights inters os `colMult` sk `colAdd`
                                     diffuseLights lights inters os `colMult` dk
     where dk = mDk $ mat inters
-          rk = mRk $ mat inters
+          sk = mSk $ mat inters

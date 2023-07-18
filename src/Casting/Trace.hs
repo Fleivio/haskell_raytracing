@@ -9,29 +9,33 @@ import Math.Ray
 import Math.Vector
 
 maxDepth :: Int
-maxDepth = 4
+maxDepth = 5
 
-localColor :: Ray -> Scene -> RGB
-localColor ray (Scene lsrc obst sBackLgt sAmbLgt) = maybe sBackLgt locColor inters
-    where inters = closestIntersection ray obst
-          locColor i = (mColor (mat i) `colCombine` sAmbLgt) `colAdd` multipleLightsAt lsrc i obst
+localColor :: Scene -> Maybe Intersection -> RGB
+localColor (Scene lsrc obst sBackLgt sAmbLgt) intrs = maybe sBackLgt locColor intrs
+    where locColor i = (mColor (mat i) `colCombine` sAmbLgt) `colAdd` multipleLightsAt lsrc i obst
 
-reflectedColor :: Int -> Ray -> Scene -> RGB
-reflectedColor depth ray s = clamp . (`colMult` (1/fromIntegral depth )) $ maybe black refColor inters
-    where inters = closestIntersection ray (objs s)
-          refColor i = rayTrace' (depth + 1) (Ray rPos dirRay) s `colMult` mRk (mat i)
+reflectedColor :: Int -> Scene -> Maybe Intersection -> RGB
+reflectedColor depth s intr = clamp $ maybe black refColor intr
+    where refColor i = rayTrace' (depth + 1) (Ray rPos dirRay) s `colMult` mRk (mat i)
             where   rPos = pos i .-. (dirRay .*. 0.1)
                     dirRay = vNeg $ vReflect opRayDir nNormalS
-                    opRayDir = vNormalize $ vNeg $ ryDir ray
+                    opRayDir = vNeg $ ryDir ( ry i )
                     nNormalS = normal i
+
+calcColor :: Int -> Ray -> Scene -> RGB
+calcColor d r s = localColor s intrs `colAdd` reflectedColor d s intrs
+    where intrs = closestIntersection r (objs s)
 
 rayTrace' :: Int -> Ray -> Scene -> RGB
 rayTrace' depth ray s
     | depth >= maxDepth = black
-    | otherwise = clamp $ localColor ray s `colAdd` reflectedColor depth ray s
+    | otherwise = scale $ calcColor depth ray s
+        where scale = clamp . (`colMult` (1 / fromIntegral depth))
 
 rayCast :: Ray -> Scene -> RGB
-rayCast ray s = clamp $ localColor ray s
+rayCast ray s = clamp $ localColor s intrs
+    where intrs = closestIntersection ray (objs s)
 
 rayTrace :: Ray -> Scene -> RGB
 rayTrace = rayTrace' 1
