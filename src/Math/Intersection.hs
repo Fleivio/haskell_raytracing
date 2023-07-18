@@ -32,7 +32,7 @@ intersect :: Ray -> Object -> [(Double, Intersection)]
 intersect r@(Ray rayOrigin rayDir)
           (Object shape obCenter material)
     = case shape of
-        Sphere radius-> let m = (rayOrigin) .-. obCenter
+        Sphere radius-> let m = rayOrigin .-. obCenter
                             b = rayDir ... m
                             c =  m ... m - radius * radius
                         in

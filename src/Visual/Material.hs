@@ -22,10 +22,10 @@ glass :: Material
 glass = Material {mColor = RGB 0.0 0.0 0.0, mRk = 0.0, mTk = 0.9, mDk = 0.0}
 
 wood :: Material
-wood = Material {mColor = RGB 0.6 0.3 0.1, mRk = 0.1, mTk = 0.0, mDk = 0.8}
+wood = Material {mColor = RGB 0.6 0.3 0.1, mRk = 0.01, mTk = 0.0, mDk = 0.8}
 
 mirror :: Material
-mirror = Material {mColor = RGB 0.6 0.6 0.6, mRk = 1.2, mTk = 0.0, mDk = 0.3}
+mirror = Material {mColor = RGB 0.4 0.4 0.4, mRk = 1.2, mTk = 0.0, mDk = 0.3}
 
 rubber :: Material
 rubber = Material {mColor = RGB 0.1 0.1 0.1, mRk = 0.1, mTk = 0.0, mDk = 0.9}
@@ -34,7 +34,7 @@ metal :: Material
 metal = Material {mColor = RGB 0.4 0.4 0.4, mRk = 0.7, mTk = 0.0, mDk = 0.8}
 
 plastic :: Material
-plastic = Material {mColor = RGB 1 0 0, mRk = 0.8, mTk = 0.0, mDk = 0.5}
+plastic = Material {mColor = RGB 1 0 0, mRk = 0.5, mTk = 0.0, mDk = 0.5}
 
 vanta :: Material
 vanta = Material {mColor = RGB 0.0 0.0 0.0, mRk = 0.0, mTk = 0.0, mDk = 1}

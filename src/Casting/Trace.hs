@@ -16,16 +16,14 @@ localColor ray (Scene lsrc obst sBackLgt sAmbLgt) = maybe sBackLgt locColor inte
     where inters = closestIntersection ray obst
           locColor i = (mColor (mat i) `colCombine` sAmbLgt) `colAdd` multipleLightsAt lsrc i obst
 
---errado
 reflectedColor :: Int -> Ray -> Scene -> RGB
 reflectedColor depth ray s = clamp . (`colMult` (1/fromIntegral depth )) $ maybe black refColor inters
     where inters = closestIntersection ray (objs s)
           refColor i = rayTrace' (depth + 1) (Ray rPos dirRay) s `colMult` mRk (mat i)
-            where   k = 2 * (nNormalS ... opRayDir)
-                    rPos = pos i .+. (dirRay .*. 0.1)
-                    dirRay = vNeg $ nNormalS .*. k .-. opRayDir
+            where   rPos = pos i .-. (dirRay .*. 0.1)
+                    dirRay = vNeg $ vReflect opRayDir nNormalS
                     opRayDir = vNormalize $ vNeg $ ryDir ray
-                    nNormalS = vNormalize $ normal i
+                    nNormalS = normal i
 
 rayTrace' :: Int -> Ray -> Scene -> RGB
 rayTrace' depth ray s
