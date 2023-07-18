@@ -1,16 +1,11 @@
 module Visual.Object (Shape (..), Object (..)) where
 
-import Math.Vector
 import Visual.Material
 
-data Shape
-  = Sphere Double
-  | None
-  deriving (Show, Eq)
+import Math.Shape
 
 data Object = Object
   { objShape :: Shape,
-    objCenter :: Vec3,
     objMaterial :: Material
   }
   deriving (Show, Eq)

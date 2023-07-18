@@ -9,7 +9,7 @@ import Math.Ray
 import Math.Vector
 
 maxDepth :: Int
-maxDepth = 5
+maxDepth = 4
 
 localColor :: Scene -> Maybe Intersection -> RGB
 localColor (Scene lsrc obst sBackLgt sAmbLgt) intrs = maybe sBackLgt locColor intrs
@@ -22,6 +22,7 @@ reflectedColor depth s intr = clamp $ maybe black refColor intr
                     dirRay = vNeg $ vReflect opRayDir nNormalS
                     opRayDir = vNeg $ ryDir ( ry i )
                     nNormalS = normal i
+
 
 calcColor :: Int -> Ray -> Scene -> RGB
 calcColor d r s = localColor s intrs `colAdd` reflectedColor d s intrs

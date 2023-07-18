@@ -30,21 +30,28 @@ isPointLig position light obst = isPathFree light (position .+. vNormalize (ligh
 
 intersect :: Ray -> Object -> [(Double, Intersection)]
 intersect r@(Ray rayOrigin rayDir)
-          (Object shape obCenter material)
+          (Object shape material)
     = case shape of
-        Sphere radius-> let m = rayOrigin .-. obCenter
-                            b = rayDir ... m
-                            c =  m ... m - radius * radius
-                        in
-                            case solve2 1 (2 * b) c of
-                                Nothing -> []
-                                Just (t1, t2) ->
-                                    let t = if t1 < 0 then t2 else t1
-                                        t' = max t 0
-                                        p = rPointAt r t'
-                                        n = vNormalize $ p .-. obCenter
-                                    in [(t', Intersection n r material p)]
+        Sphere radius center -> let m = rayOrigin .-. center
+                                    b = rayDir ... m
+                                    c =  m ... m - radius * radius
+                                in
+                                case solve2 1 (2 * b) c of
+                                    Nothing -> []
+                                    Just (t1, t2) ->
+                                        let t = if t1 < 0 then t2 else t1
+                                            t' = max t 0
+                                            p = rPointAt r t'
+                                            n = vNormalize $ p .-. center
+                                        in [(t', Intersection n r material p)]
         None -> []
+        Polygon _ -> []
+        Polyhedron _ -> []
+        Plane point normal -> let denom = rayDir ... normal
+                                  t = ((point .-. rayOrigin) ... normal) / denom
+                              in if denom == 0 || t < 0
+                                 then []
+                                 else [(t, Intersection normal r material (rPointAt r t))]
 
 closestIntersection :: Ray -> [Object] -> Maybe Intersection
 closestIntersection r os = let intersections = concatMap (intersect r) os

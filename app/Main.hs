@@ -34,6 +34,6 @@ _stringColorTable  = [concat [ show c | c <- line] ++ "\n" | line <- colorTraced
 main :: IO ()
 main = do 
     writeFile "traced.ppm" (makePgm resol resol (concat colorTraced))
-    writeFile "casted.ppm" (makePgm resol resol (concat colorCasted))
+    -- writeFile "casted.ppm" (makePgm resol resol (concat colorCasted))
     where 
         resol = fromIntegral $ length colorTraced

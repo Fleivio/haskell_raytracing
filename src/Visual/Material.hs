@@ -22,13 +22,13 @@ data Material = Material
   deriving (Show, Eq)
 
 glass :: Material
-glass = Material {mColor = RGB 0.0 0.0 0.0, mSk = 0.0, mRk = 1, mTk = 0.9, mDk = 0.0}
+glass = Material {mColor = RGB 0.0 0.0 0.0, mSk = 0.9, mRk = 0.4, mTk = 0.9, mDk = 0.0}
 
 wood :: Material
 wood = Material {mColor = RGB 0.6 0.3 0.1, mSk = 0.01, mRk = 0, mTk = 0.0, mDk = 0.8}
 
 mirror :: Material
-mirror = Material {mColor = RGB 0.5 0.5 0.5, mSk = 1.2, mRk = 1, mTk = 0.0, mDk = 0.9}
+mirror = Material {mColor = RGB 0.5 0.5 0.5, mSk = 1.2, mRk = 1, mTk = 0.0, mDk = 0.5}
 
 rubber :: Material
 rubber = Material {mColor = RGB 0.1 0.1 0.1, mSk = 0.1, mRk = 0.1, mTk = 0.0, mDk = 0.9}
