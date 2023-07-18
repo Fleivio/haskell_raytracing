@@ -19,7 +19,7 @@ class Color a where
   green :: a
   blue :: a
 
-data RGB = RGB {r :: Double, g :: Double, b :: Double} deriving Eq
+data RGB = RGB {rColor :: Double, gColor :: Double, bColor :: Double} deriving Eq
 
 aciiTable :: String
 aciiTable = "`.-':_,^=;><+!rc*/z?sLTv)J7(|Fi{C}fI31tlu[neoZ5Yxjya]2ESwqkP6h9d4VpOGbUAKXHm8RD#$Bg0MNWQ%&@"
@@ -33,9 +33,9 @@ instance Show RGB where
 instance Color RGB where
   colMax = 1
   colMin = 0
-  colAdd c1 c2 = RGB (r c1 + r c2) (g c1 + g c2) (b c1 + b c2)
-  colMult c d = RGB (r c * d) (g c * d) (b c * d)
-  colCombine c1 c2 = RGB (r c1 * r c2) (g c1 * g c2) (b c1 * b c2)
+  colAdd (RGB r1 g1 b1) (RGB r2 g2 b2) = RGB (r1 + r2) (g1 + g2) (b1 + b2)
+  colMult (RGB r g b) d = RGB (r * d) (g * d) (b * d)
+  colCombine (RGB r1 g1 b1) (RGB r2 g2 b2) = RGB (r1 * r2) (g1 * g2) (b1 * b2)
   clamp (RGB r1 g1 b1) = RGB (clamp' r1) (clamp' g1) (clamp' b1)
     where
       clamp' x = max 0 (min x 1)

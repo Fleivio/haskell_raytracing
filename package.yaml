@@ -1,10 +1,10 @@
 name:                raytracing
 version:             0.1.0.0
-github:              "githubuser/raytracing"
+github:              "Fleivio/raytracing"
 license:             BSD3
-author:              "Author name here"
+author:              "Fleivio"
 maintainer:          "example@example.com"
-copyright:           "2023 Author name here"
+copyright:           "2023 Fleivio"
 
 extra-source-files:
 - README.md

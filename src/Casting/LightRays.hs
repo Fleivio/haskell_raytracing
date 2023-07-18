@@ -10,9 +10,9 @@ import Math.Ray
 import Data.Fixed(mod')
 
 diffuseIntensityAt :: Vec3 -> Vec3 -> Double
-diffuseIntensityAt lightDir normal = max 0 (nNormal ... nLight)
+diffuseIntensityAt lightDir n = max 0 (nNormal ... nLight)
     where
-        nNormal = vNormalize normal
+        nNormal = vNormalize n
         nLight = vNormalize lightDir
 
 diffuseLight :: Light -> Intersection -> [Object] -> RGB
@@ -30,21 +30,21 @@ diffuseLights lights inters os = clamp $ foldl colAdd black (map (\l -> diffuseL
 
 
 specularIntensityAt :: Vec3 -> Vec3 -> Vec3  -> Double
-specularIntensityAt lightDir normal viewDir = cos phi ** 100
+specularIntensityAt lightDir n viewDir = cos phi ** 100
     where
         reflectedDir = vNormalize $ vReflect nLight nNormal
-        nNormal = vNormalize normal
+        nNormal = vNormalize n
         nLight = vNormalize lightDir
         nView = vNormalize viewDir
         phi = vAngle reflectedDir nView `mod'` pi
 
 specularLight :: Light -> Intersection -> [Object] -> RGB
 specularLight (Light lightPosition lightColor)
-              (Intersection iNormal ry _ iPos)
+              (Intersection iNormal ry' _ iPos)
               objs = if lightReachPoint
                      then lightColor `colMult` lightIntensity
                      else black
-    where   viewDir = vNeg $ ryDir ry
+    where   viewDir = vNeg $ ryDir ry'
             lightReachPoint = isPointLig iPos lightPosition objs
             lightIntensity = specularIntensityAt (lightPosition .-. iPos) iNormal viewDir
 

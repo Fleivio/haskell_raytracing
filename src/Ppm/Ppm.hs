@@ -1,4 +1,3 @@
-
 module Ppm.Ppm (makePgm) where
 
 import Visual.Color
@@ -7,7 +6,7 @@ import Visual.Color
 makePgm :: Integer -> Integer -> [ RGB ] -> String
 makePgm width height xs = "P3\n" ++ show width ++ " " ++ show height ++ "\n255\n" ++ stringify xs
                   where stringify [] = ""
-                        stringify ((RGB r' g' b') : xs) = show (scale255 r') ++ " "
-                                                        ++ show (scale255 g') ++ " "
-                                                        ++ show (scale255 b') ++ " "
-                                                        ++ stringify xs
+                        stringify ((RGB r g b) : xs') = show (scale255 r) ++ " "
+                                                        ++ show (scale255 g) ++ " "
+                                                        ++ show (scale255 b) ++ " "
+                                                        ++ stringify xs'

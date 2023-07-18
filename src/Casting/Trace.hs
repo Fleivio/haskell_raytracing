@@ -12,9 +12,9 @@ maxDepth :: Int
 maxDepth = 3
 
 localColor :: Ray -> Scene -> RGB
-localColor ray (Scene lsrc objs sBackLgt sAmbLgt) = maybe sBackLgt locColor inters
-    where inters = closestIntersection ray objs
-          locColor i = (mColor (mat i) `colCombine` sAmbLgt) `colAdd` multipleLightsAt lsrc i objs
+localColor ray (Scene lsrc obst sBackLgt sAmbLgt) = maybe sBackLgt locColor inters
+    where inters = closestIntersection ray obst
+          locColor i = (mColor (mat i) `colCombine` sAmbLgt) `colAdd` multipleLightsAt lsrc i obst
 
 --errado
 reflectedColor :: Int -> Ray -> Scene -> RGB
