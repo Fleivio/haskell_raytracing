@@ -1,4 +1,4 @@
-module Casting.Trace(rayTrace) where
+module Casting.Trace(rayTrace, rayCast) where
 
 import Visual.Color
 import Math.Intersection
@@ -9,7 +9,7 @@ import Math.Ray
 import Math.Vector
 
 maxDepth :: Int
-maxDepth = 3
+maxDepth = 4
 
 localColor :: Ray -> Scene -> RGB
 localColor ray (Scene lsrc obst sBackLgt sAmbLgt) = maybe sBackLgt locColor inters
@@ -27,23 +27,13 @@ reflectedColor depth ray s = clamp . (`colMult` (1/fromIntegral depth )) $ maybe
                     opRayDir = vNormalize $ vNeg $ ryDir ray
                     nNormalS = vNormalize $ normal i
 
-            -- where orRay = pos i .+. (dirRay .*. 0.1)
-            --       dirRay = vReflect opRayDir (normal i)
-            --       opRayDir = vNormalize $ pos i .-. ryOrigin ray
-
--- reflected_ray :: Integer -> Intersection -> Color
--- reflected_ray depth (normal, hitpoint,(_,in_ray_dir),(color,kr,_)) 
---    | kr == 0.0 = black
---    | otherwise = let k = 2 * ((normalize normal) `dot` (normalize (neg in_ray_dir)))
--- 	             out_ray_dir = (scalarmult (normalize normal) k) `sub` (neg in_ray_dir)
--- 		     reflected_col = raytrace (depth + 1) (hitpoint, out_ray_dir)
---                  in scalarmult reflected_col kr
-
-
 rayTrace' :: Int -> Ray -> Scene -> RGB
 rayTrace' depth ray s
     | depth >= maxDepth = black
     | otherwise = clamp $ localColor ray s `colAdd` reflectedColor depth ray s
+
+rayCast :: Ray -> Scene -> RGB
+rayCast ray s = clamp $ localColor ray s
 
 rayTrace :: Ray -> Scene -> RGB
 rayTrace = rayTrace' 1

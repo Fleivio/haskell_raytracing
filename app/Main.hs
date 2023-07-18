@@ -9,25 +9,31 @@ import Ppm.Ppm (makePgm)
 cam :: Camera
 cam = hugeCamera
 
-colorTable :: [[RGB]]
-colorTable = map (map castR) rs
+colorTraced :: [[RGB]]
+colorTraced = map (map castR) rs
     where 
           castR r' = rayTrace r' scene 
-          rs = rayCast cam
+          rs = castRay cam
+
+colorCasted :: [[RGB]]
+colorCasted = map (map castR) rs
+    where 
+          castR r' = rayCast r' scene 
+          rs = castRay cam
 
 _grayTable :: [[Double]]
-_grayTable = map (map toGray) colorTable
+_grayTable = map (map toGray) colorTraced
 
 _genStringTable :: [String]
-_genStringTable = [ [ toASCII c | c <- line] ++ "\n" | line <- colorTable]
+_genStringTable = [ [ toASCII c | c <- line] ++ "\n" | line <- colorTraced]
 
 _stringColorTable :: [String]
-_stringColorTable  = [concat [ show c | c <- line] ++ "\n" | line <- colorTable]
+_stringColorTable  = [concat [ show c | c <- line] ++ "\n" | line <- colorTraced]
 
 
 main :: IO ()
 main = do 
-    writeFile "test.ppm" (makePgm resol resol colorString)
+    writeFile "traced.ppm" (makePgm resol resol (concat colorTraced))
+    writeFile "casted.ppm" (makePgm resol resol (concat colorCasted))
     where 
-        resol = fromIntegral $ length colorTable
-        colorString = concat colorTable
+        resol = fromIntegral $ length colorTraced

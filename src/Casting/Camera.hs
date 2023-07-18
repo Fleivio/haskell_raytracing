@@ -1,4 +1,4 @@
-module Casting.Camera (Camera (..), rayCast, smallCamera, baseCamera, hugeCamera ) where
+module Casting.Camera (Camera (..), castRay, smallCamera, baseCamera, hugeCamera ) where
 
 import Math.Ray
 import Math.Vector
@@ -17,8 +17,8 @@ resolutionVec Camera {res = r} = [-r .. r]
 genRay :: Camera -> Vec3 -> Ray
 genRay Camera {eye = e} p = Ray e (vNormalize $ p .-. e)
 
-rayCast :: Camera -> [[Ray]]
-rayCast c@Camera {near = n} = map (map (genRay c)) vecs
+castRay :: Camera -> [[Ray]]
+castRay c@Camera {near = n} = map (map (genRay c)) vecs
   where
     vecs =
       [ [Vec3 (fromInteger a) (fromInteger b) n | a <- rv]
